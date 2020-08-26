@@ -1,13 +1,20 @@
 package br.edu.iff.projetoHotel.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Hotel implements Serializable{
@@ -20,11 +27,13 @@ public class Hotel implements Serializable{
     @Column(length = 18, nullable = false, unique = true, updatable = false)
     private String cnpj;
     
+    @Embedded
     private Endereco endereco;
-    
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Telefone> telefones;
-    
-    private List<Quarto> quartos;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(nullable = false, name = "hotel_id")
+    private List<Quarto> quartos = new ArrayList<>();
 
     public Long getId() {
         return id;

@@ -1,15 +1,22 @@
 package br.edu.iff.projetoHotel.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Pessoa implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
@@ -22,9 +29,10 @@ public abstract class Pessoa implements Serializable{
     @Column(length = 14, nullable = false, unique = true, updatable = false)
     private String cpf;
     
+    @Embedded
     private Endereco endereco;
-    
-    private List<Telefone> telefones;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Telefone> telefones = new ArrayList<>();
 
     public Long getId() {
         return id;

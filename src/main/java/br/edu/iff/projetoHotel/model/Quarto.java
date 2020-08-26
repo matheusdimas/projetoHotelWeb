@@ -1,6 +1,8 @@
 package br.edu.iff.projetoHotel.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -10,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Quarto implements Serializable{
@@ -25,8 +28,9 @@ public class Quarto implements Serializable{
     private TipoQuartoEnum tipo;
     private int qtdCamaSolteiro;
     private int qtdCamaCasal;
-    
-    private List<Reserva> reservas;
+    @ManyToMany(mappedBy = "quartos")
+    @JsonBackReference
+    private List<Reserva> reservas = new ArrayList<>();
 
     public Long getId() {
         return id;
