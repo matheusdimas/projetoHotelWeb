@@ -1,8 +1,12 @@
 package br.edu.iff.projetoHotel.model;
 
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
+@Entity
 public class Cliente extends Pessoa{
+    @Column(length = 200)
     private String documentos;
     
     private List<Reserva> reservas;

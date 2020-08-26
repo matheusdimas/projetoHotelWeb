@@ -3,12 +3,25 @@ package br.edu.iff.projetoHotel.model;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class Quarto implements Serializable{
     private static final long serialVersionUID = 1L;
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private int numero;
+    @Column(nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
     private TipoQuartoEnum tipo;
     private int qtdCamaSolteiro;
     private int qtdCamaCasal;

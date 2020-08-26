@@ -3,14 +3,23 @@ package br.edu.iff.projetoHotel.model;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-
+@Entity
 public abstract class Pessoa implements Serializable{
     private static final long serialVersionUID = 1L;
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, length = 150)
     private String nome;
+    @Column(nullable = false, length = 100, unique = true, updatable = false)
     private String email;
+    @Column(length = 14, nullable = false, unique = true, updatable = false)
     private String cpf;
     
     private Endereco endereco;
