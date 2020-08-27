@@ -4,12 +4,16 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
 @Embeddable
 public class Telefone implements Serializable{
     private static final long serialVersionUID = 1L;
     
     @Column(length = 14, nullable = false)
+    @NotBlank(message = "Número de telefone obrigatório.")
+    @Length(min=13, max = 14, message = "Telefone deve ter 13 ou 14 caracteres (Ex: (99)9999-9999 ou (99)99999-9999")
     private String numero;
     
     public String getNumero() {

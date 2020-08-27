@@ -13,6 +13,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Quarto implements Serializable{
@@ -22,11 +26,15 @@ public class Quarto implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
+    @Digits(integer = 4, fraction = 0, message = "Numero do quarto deve ser inteiro e ter no máximo 4 digitos.")
     private int numero;
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Tipo de quarto obrigatório.")
     private TipoQuartoEnum tipo;
+    @Min(0) @Max(4)
     private int qtdCamaSolteiro;
+    @Min(0) @Max(2)
     private int qtdCamaCasal;
     @ManyToMany(mappedBy = "quartos")
     @JsonBackReference

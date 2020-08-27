@@ -16,6 +16,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Reserva implements Serializable{
@@ -26,24 +31,35 @@ public class Reserva implements Serializable{
     private Long id;
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull(message = "Data de registro é obrigatória.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Calendar dataHora;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
+    @NotNull(message = "Data de início da reserva é obrigatória.")
+    @FutureOrPresent(message = "Data de inicio da reserva deve ser atual ou no futuro.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Calendar inico;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
+    @NotNull(message = "Data de término da reserva é obrigatória.")
+    @Future(message = "Data de término da reserva deve ser atual ou no futuro.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Calendar termino;
     
     @JsonManagedReference
     @ManyToMany
+    @Size(min = 1, message = "Reserva deve ter no mínimo 1 quarto.")
     private List<Quarto> quartos = new ArrayList<>();
     @JsonManagedReference
     @ManyToOne
     @JoinColumn(nullable = false)
+    @NotNull(message = "Cliente obrigatório.")
     private Cliente cliente;
     @JsonManagedReference
     @ManyToOne
     @JoinColumn(nullable = false)
+    @NotNull(message = "Funcionario obrigatório.")
     private Funcionario funcionario;
 
     public Long getId() {

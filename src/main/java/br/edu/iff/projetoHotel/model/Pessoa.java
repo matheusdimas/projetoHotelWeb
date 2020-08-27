@@ -14,6 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -23,15 +29,23 @@ public abstract class Pessoa implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 150)
+    @NotBlank(message = "Nome obrigatório.")
+    @Length(max = 150, message = "Nome deve ter no máximo 150 caracteres.")
     private String nome;
     @Column(nullable = false, length = 100, unique = true, updatable = false)
+    @NotBlank(message = "Email obrigatório.")
+    @Email
     private String email;
     @Column(length = 14, nullable = false, unique = true, updatable = false)
+    @CPF(message = "CPF inválido.")
     private String cpf;
     
     @Embedded
+    @NotNull(message = "Endereço obrigatório.")
+    @Valid
     private Endereco endereco;
     @ElementCollection(fetch = FetchType.EAGER)
+    @Valid
     private List<Telefone> telefones = new ArrayList<>();
 
     public Long getId() {

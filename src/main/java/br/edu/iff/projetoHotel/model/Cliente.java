@@ -6,10 +6,12 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 public class Cliente extends Pessoa{
     @Column(length = 200)
+    @Length(max = 200, message = "Documentos deve ter no máximo 200 caracteres.")
     private String documentos;
     @JsonBackReference
     @OneToMany(mappedBy = "cliente")
