@@ -1,5 +1,6 @@
 package br.edu.iff.projetoHotel.model;
 
+import br.edu.iff.projetoHotel.annotation.NumeroQuartosValidation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class Hotel implements Serializable{
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false, name = "hotel_id")
     @Size(min = 1, message = "Hotel deve ter no mínimo 1 quarto.")
+    @NumeroQuartosValidation(message = "Número dos quartos inválidos.")
     @Valid
     private List<Quarto> quartos = new ArrayList<>();
 

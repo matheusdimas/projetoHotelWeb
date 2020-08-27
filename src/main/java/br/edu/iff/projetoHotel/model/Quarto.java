@@ -1,5 +1,6 @@
 package br.edu.iff.projetoHotel.model;
 
+import br.edu.iff.projetoHotel.annotation.QuartoCamasValidation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@QuartoCamasValidation
 public class Quarto implements Serializable{
     private static final long serialVersionUID = 1L;
     
