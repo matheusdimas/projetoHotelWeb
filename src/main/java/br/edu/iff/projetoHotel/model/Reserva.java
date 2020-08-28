@@ -39,7 +39,7 @@ public class Reserva implements Serializable{
     @NotNull(message = "Data de início da reserva é obrigatória.")
     @FutureOrPresent(message = "Data de inicio da reserva deve ser atual ou no futuro.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Calendar inico;
+    private Calendar inicio;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull(message = "Data de término da reserva é obrigatória.")
@@ -79,11 +79,11 @@ public class Reserva implements Serializable{
     }
 
     public Calendar getInico() {
-        return inico;
+        return inicio;
     }
 
-    public void setInico(Calendar inico) {
-        this.inico = inico;
+    public void setInico(Calendar inicio) {
+        this.inicio = inicio;
     }
 
     public Calendar getTermino() {
