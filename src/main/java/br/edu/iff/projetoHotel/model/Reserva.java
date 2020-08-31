@@ -78,11 +78,11 @@ public class Reserva implements Serializable{
         this.dataHora = dataHora;
     }
 
-    public Calendar getInico() {
+    public Calendar getInicio() {
         return inicio;
     }
 
-    public void setInico(Calendar inicio) {
+    public void setInicio(Calendar inicio) {
         this.inicio = inicio;
     }
 

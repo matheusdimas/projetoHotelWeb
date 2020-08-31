@@ -107,7 +107,7 @@ public class ProjetoHotelApplication implements CommandLineRunner{
         inicio.set(2020, 10, 10);
         termino.set(2020, 10, 20);
         
-        r1.setInico(inicio);
+        r1.setInicio(inicio);
         r1.setTermino(termino);
         
         reservaRepo.save(r1);
