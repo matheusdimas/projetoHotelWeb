@@ -51,6 +51,7 @@ public class FuncionarioService {
         try {
             f.setCpf(obj.getCpf());
             f.setEmail(obj.getEmail());
+            f.setSenha(obj.getSenha());
             return repo.save(f);
         } catch (Exception e) {
             throw new RuntimeException("Falha ao atualizar o Funcionario.");
