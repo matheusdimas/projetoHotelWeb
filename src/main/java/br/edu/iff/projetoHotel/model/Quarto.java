@@ -2,6 +2,7 @@ package br.edu.iff.projetoHotel.model;
 
 import br.edu.iff.projetoHotel.annotation.QuartoCamasValidation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Quarto implements Serializable{
     @Min(0) @Max(2)
     private int qtdCamaCasal;
     @ManyToMany(mappedBy = "quartos")
-    @JsonBackReference
+    @JsonIgnore
     private List<Reserva> reservas = new ArrayList<>();
 
     public Long getId() {

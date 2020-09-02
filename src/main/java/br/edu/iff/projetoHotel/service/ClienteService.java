@@ -65,12 +65,11 @@ public class ClienteService {
         //Cliente já existe
         Cliente obj = findById(c.getId());
         //arquivo
+        c.setDocumentos(obj.getDocumentos());
         if (file != null) {
             if (!file.isEmpty()) {
                 salvarArquivo(file, c.getCpf() + ".pdf");
                 c.setDocumentos(c.getCpf() + ".pdf");
-            } else {
-                c.setDocumentos(null);
             }
         }
         try {

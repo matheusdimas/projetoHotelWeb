@@ -1,6 +1,7 @@
 package br.edu.iff.projetoHotel.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -13,7 +14,7 @@ public class Cliente extends Pessoa{
     @Column(length = 200)
     @Length(max = 200, message = "Documentos deve ter no máximo 200 caracteres.")
     private String documentos;
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Reserva> reservas = new ArrayList<>();
 

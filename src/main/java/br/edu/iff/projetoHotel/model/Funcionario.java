@@ -1,6 +1,8 @@
 package br.edu.iff.projetoHotel.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -10,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
+@JsonIgnoreProperties(value = "senha", allowGetters = false, allowSetters = true)
 public class Funcionario extends Pessoa{
     @Column(nullable = false, length = 50)
     @NotBlank(message = "Setor obrigatório.")
@@ -19,7 +22,7 @@ public class Funcionario extends Pessoa{
     @NotBlank(message = "Senha obrigatória.")
     @Length(min = 8, message = "Senha deve ter no mínimo 8 caracteres.")
     private String senha;
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "funcionario")
     private List<Reserva> reservas = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package br.edu.iff.projetoHotel.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,30 +34,30 @@ public class Reserva implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "Data de registro é obrigatória.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Calendar dataHora;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull(message = "Data de início da reserva é obrigatória.")
     @FutureOrPresent(message = "Data de inicio da reserva deve ser atual ou no futuro.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Calendar inicio;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull(message = "Data de término da reserva é obrigatória.")
     @Future(message = "Data de término da reserva deve ser atual ou no futuro.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Calendar termino;
     
-    @JsonManagedReference
     @ManyToMany
     @Size(min = 1, message = "Reserva deve ter no mínimo 1 quarto.")
     private List<Quarto> quartos = new ArrayList<>();
-    @JsonManagedReference
     @ManyToOne
     @JoinColumn(nullable = false)
     @NotNull(message = "Cliente obrigatório.")
     private Cliente cliente;
-    @JsonManagedReference
     @ManyToOne
     @JoinColumn(nullable = false)
     @NotNull(message = "Funcionario obrigatório.")

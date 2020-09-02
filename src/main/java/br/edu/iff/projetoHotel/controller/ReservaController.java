@@ -24,7 +24,7 @@ public class ReservaController {
     @GetMapping
     public ResponseEntity getAll(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "size", defaultValue = "0", required = false) int size,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size,
             @RequestParam(name = "clienteId", defaultValue = "0", required = false) Long clienteId,
             @RequestParam(name = "funcionarioId", defaultValue = "0", required = false) Long funcionarioId,
             @RequestParam(name = "hotelId", defaultValue = "0", required = false) Long hotelId){
