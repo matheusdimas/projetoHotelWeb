@@ -1,5 +1,6 @@
 package br.edu.iff.projetoHotel.service;
 
+import br.edu.iff.projetoHotel.exception.NotFoundException;
 import br.edu.iff.projetoHotel.model.Quarto;
 import br.edu.iff.projetoHotel.model.Reserva;
 import br.edu.iff.projetoHotel.repository.ReservaRepository;
@@ -7,6 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.ConstraintViolationException;
 import jdk.jshell.spi.ExecutionControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +45,7 @@ public class ReservaService {
     public Reserva findById(Long id) {
         Optional<Reserva> obj = repo.findById(id);
         if (obj.isEmpty()) {
-            throw new RuntimeException("Reserva não encontrada.");
+            throw new NotFoundException("Reserva não encontrada.");
         }
         return obj.get();
     }
@@ -57,6 +59,13 @@ public class ReservaService {
             r.setDataHora(Calendar.getInstance());
             return repo.save(r);
         } catch (Exception e) {
+            Throwable t = e;
+            while (t.getCause() != null) {
+                t = t.getCause();
+                if (t instanceof ConstraintViolationException) {
+                    throw ((ConstraintViolationException) t);
+                }
+            }
             throw new RuntimeException("Falha ao salvar a Reserva.");
         }
     }
@@ -73,15 +82,22 @@ public class ReservaService {
             r.setDataHora(Calendar.getInstance());
             return repo.save(r);
         } catch (Exception e) {
+            Throwable t = e;
+            while (t.getCause() != null) {
+                t = t.getCause();
+                if (t instanceof ConstraintViolationException) {
+                    throw ((ConstraintViolationException) t);
+                }
+            }
             throw new RuntimeException("Falha ao atualizar a Reserva");
         }
     }
-    
-    public void delete(Long id){
+
+    public void delete(Long id) {
         Reserva obj = findById(id);
-        try{
+        try {
             repo.delete(obj);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Falha ao deletar a Reserva.");
         }
     }

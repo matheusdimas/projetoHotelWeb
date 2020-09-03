@@ -1,5 +1,6 @@
 package br.edu.iff.projetoHotel.service;
 
+import br.edu.iff.projetoHotel.exception.NotFoundException;
 import br.edu.iff.projetoHotel.model.Hotel;
 import br.edu.iff.projetoHotel.model.Quarto;
 import br.edu.iff.projetoHotel.repository.HotelRepository;
@@ -28,7 +29,7 @@ public class HotelService {
     public Hotel findById(Long id) {
         Optional<Hotel> result = repo.findById(id);
         if (result.isEmpty()) {
-            throw new RuntimeException("Hotel não encontrado.");
+            throw new NotFoundException("Hotel não encontrado.");
         }
         return result.get();
     }

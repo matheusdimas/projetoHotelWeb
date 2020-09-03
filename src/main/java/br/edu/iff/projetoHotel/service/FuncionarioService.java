@@ -1,10 +1,12 @@
 package br.edu.iff.projetoHotel.service;
 
+import br.edu.iff.projetoHotel.exception.NotFoundException;
 import br.edu.iff.projetoHotel.model.Funcionario;
 import br.edu.iff.projetoHotel.model.Pessoa;
 import br.edu.iff.projetoHotel.repository.FuncionarioRepository;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +30,7 @@ public class FuncionarioService {
     public Funcionario findById(Long id) {
         Optional<Funcionario> result = repo.findById(id);
         if (result.isEmpty()) {
-            throw new RuntimeException("Funcionario não encontrado.");
+            throw new NotFoundException("Funcionario não encontrado.");
         }
         return result.get();
     }
@@ -54,19 +56,26 @@ public class FuncionarioService {
             f.setSenha(obj.getSenha());
             return repo.save(f);
         } catch (Exception e) {
+            Throwable t = e;
+            while (t.getCause() != null) {
+                t = t.getCause();
+                if (t instanceof ConstraintViolationException) {
+                    throw ((ConstraintViolationException) t);
+                }
+            }
             throw new RuntimeException("Falha ao atualizar o Funcionario.");
         }
     }
-    
-    public void delete(Long id){
+
+    public void delete(Long id) {
         Funcionario obj = findById(id);
         verificaExclusaoClienteComReservas(obj);
-        try{
-        repo.delete(obj);
-        }catch(Exception e){
+        try {
+            repo.delete(obj);
+        } catch (Exception e) {
             throw new RuntimeException("Falha ao excluir o Funcionario");
         }
-        
+
     }
 
     private void verificaCpfEmailCadastrado(String cpf, String email) {

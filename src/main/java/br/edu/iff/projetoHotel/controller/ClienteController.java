@@ -62,5 +62,5 @@ public class ClienteController {
         Cliente cliente = service.findById(id);
         service.update(cliente, file);
         return ResponseEntity.ok().build();
-    }
+    }   
 }

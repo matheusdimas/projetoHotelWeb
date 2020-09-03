@@ -1,5 +1,6 @@
 package br.edu.iff.projetoHotel.service;
 
+import br.edu.iff.projetoHotel.exception.NotFoundException;
 import br.edu.iff.projetoHotel.model.Cliente;
 import br.edu.iff.projetoHotel.model.Pessoa;
 import br.edu.iff.projetoHotel.repository.ClienteRepository;
@@ -37,7 +38,7 @@ public class ClienteService {
     public Cliente findById(Long id) {
         Optional<Cliente> result = repo.findById(id);
         if (result.isEmpty()) {
-            throw new RuntimeException("Cliente não encontrado.");
+            throw new NotFoundException("Cliente não encontrado.");
         }
         return result.get();
     }
