@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragmentos :: imports-css(title='Hoteis')}">
+        <title>title</title>
+    </head>
+    <body>
+        <div th:replace="~{fragmentos :: barramenu(pagina='hoteis')}"/>
+
+        <div class="container" style="width: 60%; margin-top: 20px">
+            <div class="card-header">
+                <h4>Cadastro de hoteis
+                    <a class="btn btn-primary float-right" th:href="@{~/hoteis}" role="button">voltar</a>
+                </h4>
+            </div>
+            
+            <div th:replace="~{fragmentos :: mensagens}"></div>
+            
+            <form th:object="${hotel}" th:action="@{~/hoteis/hotel/{id}(id=${hotel.id})}" method="post" class="card-body">
+                <input type="hidden" th:field="*{id}"/>
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="nome">Nome:</label>
+                        <input th:field="*{nome}" type="text" class="form-control" placeholder="Nome" required="required" maxlength="100"/>
+                    </div>                    
+                    <div class="form-group col-md-4">
+                        <label for="cnpj">CNPJ:</label>
+                        <input th:field="*{cnpj}" pattern="[0-9]{2}.[0-9]{3}.[0-9]{3}/[0-9]{4}-[0-9]{2}" maxlength="18" type="text" class="form-control" placeholder="CNPJ" required="required"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-9">
+                        <label for="endereco.rua">Rua:</label>
+                        <input th:field="*{endereco.rua}" maxlength="200" type="text" class="form-control" placeholder="Rua" required="required"/>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="endereco.numero">Número:</label>
+                        <input th:field="*{endereco.numero}" type="number" min="0" max="9999" class="form-control" placeholder="Número"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-5">
+                        <label for="endereco.bairro">Bairro:</label>
+                        <input th:field="*{endereco.bairro}" type="text" maxlength="50" class="form-control" placeholder="Bairro" required="required"/>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="endereco.cidade">Cidade:</label>
+                        <input th:field="*{endereco.cidade}" type="text" maxlength="50" class="form-control" placeholder="Cidade" required="required"/>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="endereco.cep">CEP:</label>
+                        <input th:field="*{endereco.cep}" type="text" maxlength="9" pattern="[0-9]{5}-[0-9]{3}" class="form-control" placeholder="CEP" required="required"/>
+                    </div>                    
+                </div>
+
+                <div class="form-row">
+                    <label class="col">Telefones: <a id="addTel" class="btn btn-outline-secondary btn-sm" role="button">+</a><a id="delTel" class="btn btn-outline-secondary btn-sm" role="button">&minus;</a></label>
+                </div>
+                <div id="camposTelefones" class="form-row">
+                    <div th:each="tel, i : *{telefones}" class="form-group col-md-3" th:id="${'telefones'+ i.index}">
+                        <input th:field="*{telefones[__${i.index}__].numero}" type="tel" maxlength="14"  pattern="\([0-9]{2}\)[0-9]{4,5}-[0-9]{4}" class="form-control" placeholder="(00)00000-0000" required="required"/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label class="col">Quartos: <a id="addQuarto" class="btn btn-outline-secondary btn-sm " role="button">+</a><a id="delQuarto" class="btn btn-outline-secondary btn-sm" role="button">&minus;</a></label>
+                </div>
+                <div id="camposQuartos" class="form-row">
+                    <input type="hidden" th:each="tipo, i : ${tiposQuarto}" th:value="${tipo}"/>
+                    <div class="card col-md-3" th:each="quarto, i : *{quartos}" th:id="${'divQuarto'+i.index}">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <input th:field="*{quartos[__${i.index}__].id}" type="hidden"/>
+                                <input class="form-control form-control-sm" th:field="*{quartos[__${i.index}__].numero}" type="number" min="1" max="9999" placeholder="número" required="required"/> 
+                            </div>
+                            <div class="form-row">
+                                <select class="form-control form-control-sm" th:field="*{quartos[__${i.index}__].tipo}" required="required">
+                                    <option th:each="t : ${tiposQuarto}" th:value="${t}" th:text="${t}">content</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <img th:src="@{~/imagens/cama_solteiro.png}" width="20" height="20" class="d-inline-block"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <input class="form-control form-control-sm" th:field="*{quartos[__${i.index}__].qtdCamaSolteiro}" type="number" min="0" max="4" required="required"/>
+                                </div>
+                                <div class="col-md-2">
+                                    <img th:src="@{~/imagens/cama_casal.png}" width="20" height="20" class="d-inline-block"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <input class="form-control form-control-sm" th:field="*{quartos[__${i.index}__].qtdCamaCasal}" type="number" min="0" max="2" required="required"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <input type="submit" class="btn btn-success" value="salvar"/>
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+        <div th:replace="~{fragmentos :: imports-js}"/>
+        <script>
+            $(document).ready(function () {
+                $("#addTel").on("click", function () {
+                    var count = 0;
+                    $("#camposTelefones").find("input").each(function (index, element) {
+                        count++;
+                    });
+                    var str = '<div id="telefones' + count + '" class="form-group col-md-3"><input name="telefones[' + count + '].numero" type="tel" maxlength="14" pattern="\\([0-9]{2}\\)[0-9]{4,5}-[0-9]{4}" class="form-control" placeholder="(00)00000-0000" required="required"/></div>';
+                    $("#camposTelefones").append(str);
+                });
+                $("#delTel").on("click", function () {
+                    var e = $("#camposTelefones").find("div").last();
+                    e.remove();
+                });
+                
+                
+                $("#addQuarto").on("click", function () {
+                    var count = 0;
+                    count = $("#camposQuartos").find("[id*='divQuarto']").length;
+                    var str = '<div id="divQuarto' + count + '" class="card col-md-3"><div class="card-body"><input class="form-control form-control-sm" name="quartos[' + count + '].numero" type="number" min="1" max="9999" placeholder="número" required="required"/><select class="form-control form-control-sm" name="quartos[' + count + '].tipo" required="required">';
+                    $("#camposQuartos").find("[type='hidden']").each(function (index, element) {
+                        str += "<option value=" + $(element).attr('value') + " >" + $(element).attr('value') + "</option>";
+                    });
+                    str += '</select>';
+                    str += '<div class="form-row"><div class="col-md-2"><img src="../../imagens/cama_solteiro.png" width="20" height="20"/></div><div class="col-md-4"><input class="form-control form-control-sm" name="quartos[' + count + '].qtdCamaSolteiro" type="number" min="0" max="4" width="10px" required="required"/></div><div class="col-md-2"><img src="../../imagens/cama_casal.png" width="20" height="20"/></div><div class="col-md-4"><input class="form-control form-control-sm" name="quartos[' + count + '].qtdCamaCasal" type="number" min="0" max="2" required="required"/></div></div>';
+                    $("#camposQuartos").append(str);
+                });
+                $("#delQuarto").on("click", function () {
+                    var e = $("#camposQuartos").find("[id*='divQuarto']").last();
+                    e.remove();
+                });                
+            });
+
+        </script>
+    </body>
+</html>

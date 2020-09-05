@@ -1,4 +1,4 @@
-package br.edu.iff.projetoHotel.controller;
+package br.edu.iff.projetoHotel.controller.apirest;
 
 import br.edu.iff.projetoHotel.model.Hotel;
 import br.edu.iff.projetoHotel.service.HotelService;

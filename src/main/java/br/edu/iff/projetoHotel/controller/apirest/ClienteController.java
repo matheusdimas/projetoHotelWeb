@@ -1,7 +1,8 @@
-package br.edu.iff.projetoHotel.controller;
+package br.edu.iff.projetoHotel.controller.apirest;
 
-import br.edu.iff.projetoHotel.model.Reserva;
-import br.edu.iff.projetoHotel.service.ReservaService;
+import br.edu.iff.projetoHotel.model.Cliente;
+import br.edu.iff.projetoHotel.service.ClienteService;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,40 +15,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping(path = "/apirest/reservas")
-public class ReservaController {
+@RequestMapping(path = "/apirest/clientes")
+public class ClienteController {
+
     @Autowired
-    private ReservaService service;
-    
+    private ClienteService service;
+
     @GetMapping
     public ResponseEntity getAll(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(name = "size", defaultValue = "10", required = false) int size,
-            @RequestParam(name = "clienteId", defaultValue = "0", required = false) Long clienteId,
-            @RequestParam(name = "funcionarioId", defaultValue = "0", required = false) Long funcionarioId,
-            @RequestParam(name = "hotelId", defaultValue = "0", required = false) Long hotelId){
-        
-        return ResponseEntity.ok(service.findAll(page, size, clienteId, funcionarioId, hotelId));        
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
+
+        return ResponseEntity.ok(service.findAll(page, size));
     }
-    
+
     @GetMapping(path = "/{id}")
-    public ResponseEntity getOne(@PathVariable("id") Long id){
+    public ResponseEntity getOne(@PathVariable("id") Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
-    
+
     @PostMapping
-    public ResponseEntity save(@RequestBody Reserva reserva){
-        reserva.setId(null);
-        service.save(reserva);
-        return ResponseEntity.status(HttpStatus.CREATED).body(reserva);
+    public ResponseEntity save(@Valid @RequestBody Cliente cliente) {
+        cliente.setId(null);
+        service.save(cliente, null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
     }
     
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Reserva reserva){
-        reserva.setId(id);
-        service.update(reserva);
+    public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody Cliente cliente){
+        cliente.setId(id);
+        service.update(cliente, null);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     
@@ -56,6 +56,11 @@ public class ReservaController {
         service.delete(id);
         return ResponseEntity.ok().build();
     }
-        
-        
+    
+    @PutMapping(path = "/{id}/uploadFile")
+    public ResponseEntity uploadFile(@PathVariable("id") Long id, MultipartFile file){
+        Cliente cliente = service.findById(id);
+        service.update(cliente, file);
+        return ResponseEntity.ok().build();
+    }   
 }

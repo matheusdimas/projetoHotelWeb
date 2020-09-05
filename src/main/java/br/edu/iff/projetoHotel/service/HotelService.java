@@ -35,6 +35,7 @@ public class HotelService {
     }
 
     public Hotel save(Hotel h) {
+        verificaCnpjCadastrado(h.getCnpj());
         try {
             return repo.save(h);
         } catch (Exception e) {
@@ -72,6 +73,13 @@ public class HotelService {
             if(!q.getReservas().isEmpty()){
                 throw new RuntimeException("Não é possível excluir quartos com reservas.");
             }
+        }
+    }   
+    
+    private void verificaCnpjCadastrado(String cnpj) {
+        Optional<Hotel> result = repo.findByCnpj(cnpj);
+        if (!result.isEmpty()) {
+            throw new RuntimeException("CNPJ já cadastrado.");
         }
     }
 }
