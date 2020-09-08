@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.validation.ConstraintViolationException;
-import jdk.jshell.spi.ExecutionControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +22,10 @@ public class ReservaService {
 
     public List<Reserva> findAll() {
         return repo.findAll();
+    }
+    
+    public List<Reserva> findAll(Long hotelId) {
+        return repo.findByReservasByHotel(hotelId);
     }
 
     public List<Reserva> findAll(int page, int size, Long clienteId, Long funcionarioId, Long hotelId) {
@@ -55,6 +58,8 @@ public class ReservaService {
         verificarDataInicioETermino(r);
         //Verificar se quartos já estão reservados.
         verificarQuartosReservados(r);
+        //Remove quartos nulos vindo do Form HTML
+        removeQuartosNulos(r);
         try {
             r.setDataHora(Calendar.getInstance());
             return repo.save(r);
@@ -77,7 +82,8 @@ public class ReservaService {
         verificarDataInicioETermino(r);
         //Verificar se quartos já estão reservados.
         verificarQuartosReservados(r);
-
+        //Remove quartos nulos vindo do Form HTML
+        removeQuartosNulos(r);
         try {
             r.setDataHora(Calendar.getInstance());
             return repo.save(r);
@@ -118,5 +124,13 @@ public class ReservaService {
             throw new RuntimeException("Data de início deve ser anterior a data de término.");
         }
     }
-
+    
+    public void removeQuartosNulos(Reserva r){
+        r.getQuartos().removeIf( (Quarto q) -> {
+            return q.getId()==null;
+        });
+        if(r.getQuartos().isEmpty()){
+            throw new RuntimeException("Reserva deve conter no mínimo 1 quarto.");
+        }
+    }
 }

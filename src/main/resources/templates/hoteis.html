@@ -35,7 +35,7 @@
                     <div class="card-text" th:text="'Número de quartos: '+${hotel.quartos.size()}"></div>
                     
                     <div class="card-text">
-                        <a th:href="@{~/reservas(hotel=${hotel.id})}" class="btn btn-success">Reservas</a>
+                        <a th:href="@{~/hoteis/{idHotel}/reservas(idHotel=${hotel.id})}" class="btn btn-success">Reservas</a>
                         <a th:href="@{'~/hoteis/hotel/'+${hotel.id}}" class="btn btn-warning">Editar</a>
                         <a th:href="@{'~/hoteis/'+${hotel.id}+'/deletar'}" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir esse hotel?')">Excluir</a>
                     </div>
