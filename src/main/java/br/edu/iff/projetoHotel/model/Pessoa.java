@@ -44,7 +44,7 @@ public abstract class Pessoa implements Serializable{
     @NotNull(message = "Endereço obrigatório.")
     @Valid
     private Endereco endereco;
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @Valid
     private List<Telefone> telefones = new ArrayList<>();
 

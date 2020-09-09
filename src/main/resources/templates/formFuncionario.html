@@ -38,6 +38,17 @@
                     </div>
                 </div>
                 <div class="form-row">
+                    <div class="form-group col">
+                        <label>Permissões:</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-check form-check-inline" th:each="permissao,i : ${permissoes}">
+                        <input class="form-check-input" type="checkbox" th:name="${'permissoes['+i.index+'].id'}"  th:value="${permissao.id}" th:checked="${#lists.contains(funcionario.permissoes, permissao)? 'checked' : false}" />
+                        <label class="form-check-label" th:text="${permissao.nome}">t</label>
+                    </div>
+                </div>
+                <div class="form-row">
                     <div class="form-group col-md-9">
                         <label for="endereco.rua">Rua:</label>
                         <input th:field="*{endereco.rua}" maxlength="200" type="text" class="form-control" placeholder="Rua" required="required"/>

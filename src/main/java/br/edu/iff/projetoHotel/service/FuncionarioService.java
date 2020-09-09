@@ -2,6 +2,7 @@ package br.edu.iff.projetoHotel.service;
 
 import br.edu.iff.projetoHotel.exception.NotFoundException;
 import br.edu.iff.projetoHotel.model.Funcionario;
+import br.edu.iff.projetoHotel.model.Permissao;
 import br.edu.iff.projetoHotel.model.Pessoa;
 import br.edu.iff.projetoHotel.repository.FuncionarioRepository;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,7 +40,10 @@ public class FuncionarioService {
     public Funcionario save(Funcionario f) {
         // verifica se cpf ou email estão cadastrados
         verificaCpfEmailCadastrado(f.getCpf(), f.getEmail());
+        //Verifica permissões nulas
+        removePermissoesNulas(f);
         try {
+            f.setSenha(new BCryptPasswordEncoder().encode(f.getSenha()));
             return repo.save(f);
         } catch (Exception e) {
             throw new RuntimeException("Falha ao salvar o Funcionario.");
@@ -48,6 +53,8 @@ public class FuncionarioService {
     public Funcionario update(Funcionario f, String senhaAtual, String novaSenha, String confirmarNovaSenha) {
         //Verifica de funcionario já existe
         Funcionario obj = findById(f.getId());
+        //Verifica permissões nulas
+        removePermissoesNulas(f);
         //Verifica alteração da senha
         alterarSenha(obj, senhaAtual, novaSenha, confirmarNovaSenha);
         try {
@@ -93,13 +100,22 @@ public class FuncionarioService {
             if (!novaSenha.equals(confirmarNovaSenha)) {
                 throw new RuntimeException("Nova Senha e Confirmar Nova Senha não conferem.");
             }
-            obj.setSenha(novaSenha);
+            obj.setSenha(new BCryptPasswordEncoder().encode(novaSenha));
         }
     }
 
     private void verificaExclusaoClienteComReservas(Funcionario f) {
         if (!f.getReservas().isEmpty()) {
             throw new RuntimeException("Funcionario possui reservas. Não pode ser excluído.");
+        }
+    }
+    
+    public void removePermissoesNulas(Funcionario f){
+        f.getPermissoes().removeIf( (Permissao p) -> {
+            return p.getId()==null;
+        });
+        if(f.getPermissoes().isEmpty()){
+            throw new RuntimeException("Funcionario deve conter no mínimo 1 permissão.");
         }
     }
 }

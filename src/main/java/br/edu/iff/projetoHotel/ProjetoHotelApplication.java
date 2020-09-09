@@ -4,6 +4,7 @@ import br.edu.iff.projetoHotel.model.Cliente;
 import br.edu.iff.projetoHotel.model.Endereco;
 import br.edu.iff.projetoHotel.model.Funcionario;
 import br.edu.iff.projetoHotel.model.Hotel;
+import br.edu.iff.projetoHotel.model.Permissao;
 import br.edu.iff.projetoHotel.model.Quarto;
 import br.edu.iff.projetoHotel.model.Reserva;
 import br.edu.iff.projetoHotel.model.Telefone;
@@ -11,6 +12,7 @@ import br.edu.iff.projetoHotel.model.TipoQuartoEnum;
 import br.edu.iff.projetoHotel.repository.ClienteRepository;
 import br.edu.iff.projetoHotel.repository.FuncionarioRepository;
 import br.edu.iff.projetoHotel.repository.HotelRepository;
+import br.edu.iff.projetoHotel.repository.PermissaoRepository;
 import br.edu.iff.projetoHotel.repository.ReservaRepository;
 import java.util.Calendar;
 import java.util.List;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class ProjetoHotelApplication implements CommandLineRunner{
@@ -30,6 +33,8 @@ public class ProjetoHotelApplication implements CommandLineRunner{
     private HotelRepository hotelRepo;
     @Autowired
     private ReservaRepository reservaRepo;
+    @Autowired
+    private PermissaoRepository permissaoRepo;
     
     public static void main(String[] args) {
         SpringApplication.run(ProjetoHotelApplication.class, args);
@@ -37,6 +42,13 @@ public class ProjetoHotelApplication implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
+        //Permissão
+        Permissao p1 = new Permissao();
+        p1.setNome("ADMIN");
+        Permissao p2 = new Permissao();
+        p2.setNome("FUNC");
+        permissaoRepo.saveAll(List.of(p1, p2));
+        
         //Cliente
         Cliente c1 = new Cliente();
         c1.setNome("Matheus");
@@ -62,13 +74,14 @@ public class ProjetoHotelApplication implements CommandLineRunner{
         
         //Funcionario
         Funcionario f1 = new Funcionario();
+        f1.setPermissoes(List.of(p1));
         f1.setNome("João");
         f1.setEmail("joao@gmail.com");
         f1.setCpf("325.291.890-05");
         f1.setEndereco(end);
         f1.setTelefones(List.of(t1,t2));
         f1.setSetor("Financeiro");
-        f1.setSenha("12345678");
+        f1.setSenha(new BCryptPasswordEncoder().encode("12345678"));
         
         funcionarioRepo.save(f1);
         

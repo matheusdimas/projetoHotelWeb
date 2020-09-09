@@ -1,6 +1,7 @@
 package br.edu.iff.projetoHotel.controller.view;
 
 import br.edu.iff.projetoHotel.model.Funcionario;
+import br.edu.iff.projetoHotel.repository.PermissaoRepository;
 import br.edu.iff.projetoHotel.service.FuncionarioService;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ public class FuncionarioViewController {
 
     @Autowired
     private FuncionarioService service;
+    @Autowired
+    private PermissaoRepository permissaoRepo;
 
     @GetMapping
     public String getAll(Model model) {
@@ -34,6 +37,7 @@ public class FuncionarioViewController {
     @GetMapping(path = "/funcionario")
     public String cadastro(Model model) {
         model.addAttribute("funcionario", new Funcionario());
+        model.addAttribute("permissoes", permissaoRepo.findAll());
         return "formFuncionario";
     }
 
@@ -43,6 +47,9 @@ public class FuncionarioViewController {
             @RequestParam("confirmarSenha") String confirmarSenha,
             Model model) {
 
+        //Valores a serem retornados
+        model.addAttribute("permissoes", permissaoRepo.findAll());
+        
         if (result.hasErrors()) {
             model.addAttribute("msgErros", result.getAllErrors());
             return "formFuncionario";
@@ -68,6 +75,7 @@ public class FuncionarioViewController {
     @GetMapping(path = "/funcionario/{id}")
     public String atualizacao(@PathVariable("id") Long id, Model model) {
         model.addAttribute("funcionario", service.findById(id));
+        model.addAttribute("permissoes", permissaoRepo.findAll());
         return "formFuncionario";
     }
     
@@ -76,6 +84,9 @@ public class FuncionarioViewController {
             BindingResult result,
             @PathVariable("id") Long id,
             Model model) {
+        
+        //Valores a serem retornados
+        model.addAttribute("permissoes", permissaoRepo.findAll());
         
         List<FieldError> list = new ArrayList<>();
         for(FieldError fe : result.getFieldErrors()){
